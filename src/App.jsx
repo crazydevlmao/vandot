@@ -21,7 +21,7 @@ export default function VanSol() {
 
     async function fetchMarketCap() {
       try {
-        const res = await fetch(`https://corsproxy.io/?https://public-api.birdeye.so/defi/price?address=${tokenMint}&include_liquidity=true`, {
+        const res = await fetch(`https://public-api.birdeye.so/defi/price?address=${tokenMint}&include_liquidity=true`, {
 
           headers: {
             'X-API-KEY': 'e06ad6d03b004fe4ad711cbb01d1a41c',
