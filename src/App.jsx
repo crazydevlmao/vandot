@@ -145,7 +145,7 @@ style.innerHTML = `
 }
 
 .neon-pump {
-  color: #00ff00;
+  color: #ff7a00;
   animation: neonPulse 1.6s infinite ease-in-out;
   letter-spacing: 1px;
 }
