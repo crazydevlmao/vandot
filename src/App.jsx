@@ -125,7 +125,7 @@ export default function VanSol() {
       </main>
 
       <footer className="w-full text-center py-6 text-sm">
-        <span>...</span><span className="neon-pump font-bold">pump</span>
+        <span>...</span><span className="neon-pump font-bold">bonk</span>
       </footer>
     </div>
   );
