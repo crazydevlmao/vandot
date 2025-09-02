@@ -88,7 +88,7 @@ export default function VanSol() {
           }}
         >
           <a
-            href=""
+            href="https://x.com/SolportTom/status/1921773261592879245"
             target="_blank"
             rel="noopener noreferrer"
             className={`absolute top-4 right-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? 'bg-white text-black' : 'bg-black text-white'}`}
