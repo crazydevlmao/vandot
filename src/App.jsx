@@ -17,7 +17,7 @@ export default function VanSol() {
   const rotateY = useTransform(springX, [-100, 100], [-6, 6]);
 
   useEffect(() => {
-    const tokenMint = 'JDFLfRYHmESECYpvLsi6myx3q2xULU7BMsVeAnf3pump';
+    const tokenMint = '5bQwUc6htzWgjUMtyxp98S2mjRzEY4BqJ1dC7zDWbonk';
 
     async function fetchMarketCap() {
       try {
@@ -125,7 +125,7 @@ export default function VanSol() {
       </main>
 
       <footer className="w-full text-center py-6 text-sm">
-        <span>JDFLfRYHmESECYpvLsi6myx3q2xULU7BMsVeAnf3</span><span className="neon-pump font-bold">pump</span>
+        <span>...</span><span className="neon-pump font-bold">pump</span>
       </footer>
     </div>
   );
