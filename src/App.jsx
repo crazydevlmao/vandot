@@ -88,7 +88,7 @@ export default function VanSol() {
           }}
         >
           <a
-            href="https://www.tensor.trade/item/CNz2fez8dJ35kK6yeDHEy3eraqw3B34Yw59VTBrALznd"
+            href=""
             target="_blank"
             rel="noopener noreferrer"
             className={`absolute top-4 right-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? 'bg-white text-black' : 'bg-black text-white'}`}
@@ -97,7 +97,7 @@ export default function VanSol() {
           </a>
 
           <a
-            href="https://x.com/i/communities/1937277402545066265"
+            href="https://x.com/xyzdotsol"
             target="_blank"
             rel="noopener noreferrer"
             className={`absolute top-4 left-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? 'bg-white text-black' : 'bg-black text-white'}`}
