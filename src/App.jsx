@@ -106,7 +106,7 @@ export default function VanSol() {
           </a>
 
           <h1 className="text-4xl font-extrabold mb-10 tracking-tight">
-            VAN DOT<span className="dot-fade ml-1">.</span>
+            XYZ<span className="dot-fade ml-1">.</span>
           </h1>
           <img src="/vandot.png" alt="vandot" className="w-96 h-96 mx-auto object-contain border-4 border-zinc-600 mb-10 rounded-[18%] shadow-inner backdrop-blur-sm bg-white/20 dark:bg-white/10" />
           <motion.p
