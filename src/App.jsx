@@ -113,7 +113,7 @@ export default function VanSol() {
           </motion.p>
 
           <p className={`text-sm mt-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
-            refresh in <span className={refreshCountdown < 3 ? "text-red-500 font-semibold" : ""}>{refreshCountdown}</span> seconds
+            Revalorization in <span className={refreshCountdown < 3 ? "text-red-500 font-semibold" : ""}>{refreshCountdown}</span> seconds
           </p>
         </motion.div>
       </main>
