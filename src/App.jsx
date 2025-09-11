@@ -90,11 +90,11 @@ export default function VanSol() {
           }}
           onMouseLeave={() => { x.set(0); y.set(0); }}
         >
-          <a href="https://x.com/SolportTom/status/1921773261592879245" target="_blank" rel="noopener noreferrer"
+          <a href="https://pump.fun/board" target="_blank" rel="noopener noreferrer"
              className={`absolute top-4 right-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? "bg-white text-black" : "bg-black text-white"}`}>
             <ExternalLink size={20} />
           </a>
-          <a href="https://x.com/xyzdotsol" target="_blank" rel="noopener noreferrer"
+          <a href="https://x.com/i/communities/1965975481934561765" target="_blank" rel="noopener noreferrer"
              className={`absolute top-4 left-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? "bg-white text-black" : "bg-black text-white"}`}>
             <Twitter size={20} />
           </a>
