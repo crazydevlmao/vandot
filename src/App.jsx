@@ -5,7 +5,7 @@ import { ExternalLink, Twitter } from "lucide-react";
 
 const API_BASE =
   import.meta.env.PROD
-    ? "https://YOUR-RENDER-APP.onrender.com" // <-- replace after deploy
+    ? "https://vandot.onrender.com" // <-- replace after deploy
     : ""; // dev uses Vite proxy to localhost:3001
 
 export default function VanSol() {
