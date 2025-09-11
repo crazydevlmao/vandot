@@ -109,7 +109,7 @@ export default function VanSol() {
             initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeInOut" }}
             className={`text-3xl font-medium ${darkMode ? "text-lime-400" : "text-green-700"}`}>
-            Market Cap: <span className="font-bold">{marketCapText ?? "Loading..."}</span>
+            value: <span className="font-bold">{marketCapText ?? "Loading..."}</span>
           </motion.p>
 
           <p className={`text-sm mt-2 ${darkMode ? "text-gray-300" : "text-gray-600"}`}>
