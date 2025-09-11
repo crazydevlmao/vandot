@@ -130,7 +130,7 @@ const style = document.createElement("style");
 style.innerHTML = `
 @keyframes neonPulse { 0%{text-shadow:0 0 6px #00ff00,0 0 12px #00ff00,0 0 24px #00ff00;} 50%{text-shadow:0 0 16px #00ff00,0 0 28px #00ff00,0 0 60px #00ff00;} 100%{text-shadow:0 0 6px #00ff00,0 0 12px #00ff00,0 0 24px #00ff00;} }
 @keyframes fadeDot { 0%,100%{opacity:1;} 50%{opacity:0;} }
-.neon-pump { color:#ff7a00; animation:neonPulse 1.6s infinite ease-in-out; letter-spacing:1px; }
+.neon-pump { color:#09ff00; animation:neonPulse 1.6s infinite ease-in-out; letter-spacing:1px; }
 .dot-fade { animation: fadeDot 2s infinite; }
 .futuristic-toggle { width:48px; height:48px; border-radius:50%; background:linear-gradient(135deg,#0fffc1 0%,#7e0fff 100%); box-shadow:0 0 8px rgba(0,255,255,.5),0 0 20px rgba(126,15,255,.4); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .4s ease; }
 .futuristic-toggle:hover { box-shadow:0 0 12px rgba(0,255,255,.7),0 0 28px rgba(126,15,255,.5); transform:scale(1.1); }
