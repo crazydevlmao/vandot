@@ -4,9 +4,9 @@ import "@fontsource-variable/inter";
 import { ExternalLink, Twitter } from "lucide-react";
 
 const API_BASE =
-  import.meta.env.PROD
-    ? "https://vandot.onrender.com" // <-- replace after deploy
-    : ""; // dev uses Vite proxy to localhost:3001
+  (import.meta.env.VITE_API_BASE ?? "").trim() ||
+  (import.meta.env.PROD ? "https://vandot-m6em.onrender.com" : "");
+
 
 export default function VanSol() {
   const [marketCapText, setMarketCapText] = useState(null);
