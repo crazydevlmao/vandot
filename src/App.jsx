@@ -94,7 +94,7 @@ export default function VanSol() {
              className={`absolute top-4 right-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? "bg-white text-black" : "bg-black text-white"}`}>
             <ExternalLink size={20} />
           </a>
-          <a href="https://x.com/i/communities/1972788714074947646" target="_blank" rel="noopener noreferrer"
+          <a href="https://x.com/AndyAyrey/status/1975069054898782501" target="_blank" rel="noopener noreferrer"
              className={`absolute top-4 left-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? "bg-white text-black" : "bg-black text-white"}`}>
             <Twitter size={20} />
           </a>
