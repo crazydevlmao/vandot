@@ -90,7 +90,7 @@ export default function VanSol() {
           }}
           onMouseLeave={() => { x.set(0); y.set(0); }}
         >
-          <a href="https://pump.fun/C87mBDq8yhfi4eBAjcNk8tjB9K97b3VAX5Me7WUrpump" target="_blank" rel="noopener noreferrer"
+          <a href="https://pump.fun/" target="_blank" rel="noopener noreferrer"
              className={`absolute top-4 right-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? "bg-white text-black" : "bg-black text-white"}`}>
             <ExternalLink size={20} />
           </a>
