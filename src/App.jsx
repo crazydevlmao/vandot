@@ -13,12 +13,13 @@ function computeApiBase(env) {
   }
 }
 
-const apiEnv = typeof import.meta !== "undefined" && import.meta && import.meta.env ? import.meta.env : undefined;
+const apiEnv =
+  typeof import.meta !== "undefined" && import.meta && import.meta.env ? import.meta.env : undefined;
 const API_BASE = computeApiBase(apiEnv);
 
 function mdInlineBold(s) {
   try {
-    return s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    return s.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   } catch {
     return s;
   }
@@ -55,9 +56,9 @@ const STRINGS = {
     langToggle: "CN/EN",
     loreHeading: "The Stolen Scroll · Lore",
     loreBody: `
-A nine‑foot Mao Zedong calligraphy was stolen from Hong Kong collector Fu Chunxiao’s home. In a tragic twist, an unwitting buyer **cut the scroll in half**, reportedly thinking it was a fake and “too long to hang.” Police later recovered the work—but the damage was irreversible. Media reports placed its value in the hundreds of millions; regardless of the number, its true worth is historical: a brush with revolution, a relic of memory, and a cautionary tale in the art market.
+A nine-foot Mao Zedong calligraphy was stolen from Hong Kong collector Fu Chunxiao’s home. In a tragic twist, an unwitting buyer **cut the scroll in half**, reportedly thinking it was a fake and “too long to hang.” Police later recovered the work—but the damage was irreversible. Media reports placed its value in the hundreds of millions; regardless of the number, its true worth is historical: a brush with revolution, a relic of memory, and a cautionary tale in the art market.
 
-Here, we **preserve the narrative on‑chain**. Because the original was never restored, we reimagine its cultural value on the **BNB chain**—verifiable, shareable, and tamper‑proof. Though the paper was severed, the **on‑chain scroll** continues.
+Here, we **preserve the narrative on-chain**. Because the original was never restored, we reimagine its cultural value on the **BNB chain**—verifiable, shareable, and tamper-proof. Though the paper was severed, the **on-chain scroll** continues.
 `,
     sourcesLabel: "Further reading:",
   },
@@ -68,6 +69,7 @@ export default function TheStolenScroll() {
   const [marketCapText, setMarketCapText] = useState(null);
   const [refreshCountdown, setRefreshCountdown] = useState(5);
   const [lang, setLang] = useState("CN");
+  const [copyState, setCopyState] = useState("idle");
 
   useEffect(() => {
     const tests = [
@@ -128,6 +130,39 @@ export default function TheStolenScroll() {
   const COIN_ADDRESS = "0xYourBnbTokenAddressHere";
   const t = STRINGS[lang];
 
+  const handleCopy = async () => {
+    const text = COIN_ADDRESS;
+    let success = false;
+    if (!text || /YourBnbTokenAddressHere/i.test(text)) {
+      success = false;
+    } else {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          success = true;
+        } else {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "fixed";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          try {
+            success = document.execCommand("copy");
+          } catch {
+            success = false;
+          }
+          document.body.removeChild(ta);
+        }
+      } catch {
+        success = false;
+      }
+    }
+    setCopyState(success ? "ok" : "err");
+    setTimeout(() => setCopyState("idle"), 2300);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0b0a09] via-[#14110f] to-[#1a120b] text-yellow-400 font-[Inter Variable] relative flex flex-col items-center justify-between overflow-hidden px-6 sm:px-10 md:px-24">
       <motion.div
@@ -162,7 +197,7 @@ export default function TheStolenScroll() {
               <FaXTwitter size={18} />
             </a>
             <a
-              href="https://dexscreener.com/"
+              href="https://dexscreener.com/bsc/mytokenaddress"
               target="_blank"
               rel="noopener noreferrer"
               className="h-9 px-4 flex items-center justify-center rounded-full bg-yellow-500/20 border border-yellow-400/40 hover:bg-yellow-500/30 text-yellow-100 text-xs font-semibold tracking-wide transition backdrop-blur-md shadow-lg"
@@ -263,27 +298,52 @@ export default function TheStolenScroll() {
                   <p className="font-semibold text-yellow-300 mb-2">{t.sourcesLabel}</p>
                   <ul className="list-disc list-inside space-y-1 text-sm">
                     <li>
-                      <a className="underline hover:text-yellow-200" target="_blank" rel="noopener noreferrer" href="https://www.smithsonianmag.com/smart-news/mao-zedong-scroll-was-cut-half-180976033/">
+                      <a
+                        className="underline hover:text-yellow-200"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href="https://www.smithsonianmag.com/smart-news/mao-zedong-scroll-was-cut-half-180976033/"
+                      >
                         Smithsonian Magazine – Stolen Mao Zedong Scroll Found Cut in Half
                       </a>
                     </li>
                     <li>
-                      <a className="underline hover:text-yellow-200" target="_blank" rel="noopener noreferrer" href="https://www.reuters.com/article/world/valuable-stolen-mao-zedong-scroll-found-cut-in-half-in-hong-kong-idUSKBN26T1TU/">
+                      <a
+                        className="underline hover:text-yellow-200"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href="https://www.reuters.com/article/world/valuable-stolen-mao-zedong-scroll-found-cut-in-half-in-hong-kong-idUSKBN26T1TU/"
+                      >
                         Reuters – Valuable stolen Mao Zedong scroll found cut in half
                       </a>
                     </li>
                     <li>
-                      <a className="underline hover:text-yellow-200" target="_blank" rel="noopener noreferrer" href="https://www.theartnewspaper.com/2020/10/07/stolen-mao-zedong-scroll-worth-dollar300m-found-cut-in-half">
+                      <a
+                        className="underline hover:text-yellow-200"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href="https://www.theartnewspaper.com/2020/10/07/stolen-mao-zedong-scroll-worth-dollar300m-found-cut-in-half"
+                      >
                         The Art Newspaper – Stolen Mao Zedong scroll found cut in half
                       </a>
                     </li>
                     <li>
-                      <a className="underline hover:text-yellow-200" target="_blank" rel="noopener noreferrer" href="https://www.theguardian.com/world/2020/oct/07/stolen-mao-scroll-worth-230m-was-cut-in-two-by-50-buyer-police-say">
+                      <a
+                        className="underline hover:text-yellow-200"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href="https://www.theguardian.com/world/2020/oct/07/stolen-mao-scroll-worth-230m-was-cut-in-two-by-50-buyer-police-say"
+                      >
                         The Guardian – Stolen Mao scroll cut in two
                       </a>
                     </li>
                     <li>
-                      <a className="underline hover:text-yellow-200" target="_blank" rel="noopener noreferrer" href="https://news.artnet.com/art-world-archives/three-men-arrested-connection-645-million-art-heist-hong-kong-1914181">
+                      <a
+                        className="underline hover:text-yellow-200"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href="https://news.artnet.com/art-world-archives/three-men-arrested-connection-645-million-art-heist-hong-kong-1914181"
+                      >
                         Artnet News – Recovered in a $645M Hong Kong heist
                       </a>
                     </li>
@@ -299,10 +359,24 @@ export default function TheStolenScroll() {
         <div className="inline-flex items-center gap-3 bg-[#1a120b]/80 border border-yellow-700/60 rounded-full px-5 py-3 shadow-md backdrop-blur-sm">
           <code className="text-yellow-200 font-mono text-xs sm:text-sm">{COIN_ADDRESS}</code>
           <button
-            onClick={() => navigator.clipboard.writeText(COIN_ADDRESS)}
-            className="bg-yellow-500/20 hover:bg-yellow-600/30 border border-yellow-500/40 px-3 py-1 rounded-full text-xs transition"
+            onClick={handleCopy}
+            className={`px-3 py-1 rounded-full text-xs transition border ${
+              copyState === "ok"
+                ? "bg-green-500/30 hover:bg-green-600/40 border-green-400/60 text-green-100 copied-pulse"
+                : copyState === "err"
+                ? "bg-red-500/30 hover:bg-red-600/40 border-red-400/60 text-red-100 copied-pulse"
+                : "bg-yellow-500/20 hover:bg-yellow-600/30 border-yellow-500/40"
+            }`}
           >
-            {t.copy}
+            {copyState === "ok"
+              ? lang === "CN"
+                ? "已复制"
+                : "Copied"
+              : copyState === "err"
+              ? lang === "CN"
+                ? "复制失败"
+                : "Copy failed"
+              : t.copy}
           </button>
         </div>
       </footer>
@@ -370,6 +444,8 @@ h1, p { font-family: "Noto Serif SC", "Songti SC", serif; }
 }
 .pulse-ring { position: absolute; inset: -4px; border: 1px solid rgba(240,185,11,0.45); border-radius: 9999px; animation: pulseRing 1.8s ease-out infinite; pointer-events: none; }
 .swap-tip { animation: tipFloat 2.4s ease-in-out infinite; white-space: nowrap; }
+@keyframes copiedPulse { 0% { transform: scale(1); } 50% { transform: scale(1.06); } 100% { transform: scale(1); } }
+.copied-pulse { animation: copiedPulse .8s ease-in-out 2; }
 `;
   document.head.appendChild(style);
 }
