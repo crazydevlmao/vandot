@@ -3,7 +3,7 @@
 const express = require("express");
 const app = express();
 
-const PORT = 3001; // fixed port; change if you need
+const PORT = process.env.PORT || 3001;
 
 // ==== EDIT THESE TWO LINES (hard-coded) ====
 const TOKEN_MINT = "0x60445b34c6834e1b775c4bd8789d7cbf5adf4444"; // <-- paste your BEP-20 contract here
