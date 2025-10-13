@@ -3,19 +3,23 @@
 const express = require("express");
 const app = express();
 
-const PORT = process.env.PORT || 3001;
+const PORT = 3001; // fixed port; change if you need
 
-// ==== EDIT THESE TWO LINES ====
-const TOKEN_MINT = "0xYourBnbTokenAddressHere"; // <-- paste your BEP-20 contract
-const SUPPLY = 1_000_000_000;                   // <-- total token supply (raw, not adjusted)
-// ==============================
+// ==== EDIT THESE TWO LINES (hard-coded) ====
+const TOKEN_MINT = "0xYourBnbTokenAddressHere"; // <-- paste your BEP-20 contract here
+const SUPPLY = 1_000_000_000;                    // <-- total token supply (raw units, not decimals-adjusted)
+// ===========================================
 
-// ✅ Your paid Birdeye API key
+// Birdeye API key (hard-coded as requested)
 const BIRDEYE_API_KEY = "c9d5e2f71899433fa32469947e2ac7ab";
 
-// ✅ use BNB chain endpoint
+// Birdeye BNB chain price endpoint for EVM token
 const BIRDEYE_URL = `https://public-api.birdeye.so/defi/price?address=${TOKEN_MINT}&chain=BNB&include_liquidity=true`;
 
+// Poll every 5 seconds to match the UI timer
+const POLL_MS = 5000;
+
+// In-memory cache served to the frontend
 let cache = {
   ok: false,
   price: null,
@@ -24,7 +28,7 @@ let cache = {
   error: null,
 };
 
-async function pollBirdEye() {
+async function pollBirdeye() {
   try {
     const res = await fetch(BIRDEYE_URL, {
       headers: {
@@ -34,21 +38,22 @@ async function pollBirdEye() {
     });
 
     if (!res.ok) {
-      throw new Error(`Birdeye API HTTP ${res.status}`);
+      throw new Error(`Birdeye HTTP ${res.status}`);
     }
 
     const json = await res.json();
-    const tokenPrice = json?.data?.value;
+    // Expect { data: { value: number } }
+    const tokenPrice = Number(json?.data?.value);
 
-    if (!tokenPrice || isNaN(tokenPrice)) {
-      throw new Error("Invalid price in BirdEye response");
+    if (!Number.isFinite(tokenPrice) || tokenPrice <= 0) {
+      throw new Error("Invalid or missing price in Birdeye response");
     }
 
-    const marketCap = Number(tokenPrice) * SUPPLY;
+    const marketCap = tokenPrice * SUPPLY;
 
     cache = {
       ok: true,
-      price: Number(tokenPrice),
+      price: tokenPrice,
       marketCap,
       fetchedAt: Date.now(),
       error: null,
@@ -56,30 +61,36 @@ async function pollBirdEye() {
 
     // console.log(`[OK] ${new Date().toISOString()} price=${tokenPrice} mcap=${marketCap}`);
   } catch (err) {
-    cache = { ...cache, ok: false, error: String(err) };
-    console.error(`[ERR] ${new Date().toISOString()} BirdEye poll error:`, err.message);
+    cache = {
+      ...cache,
+      ok: false,
+      error: String(err?.message || err),
+    };
+    console.error(`[ERR] ${new Date().toISOString()} Birdeye poll:`, err?.message || err);
   }
 }
 
-// Initial poll then every 3 seconds
-pollBirdEye();
-setInterval(pollBirdEye, 3000);
+// Prime immediately, then every 5s
+pollBirdeye();
+setInterval(pollBirdeye, POLL_MS);
 
-// Allow any origin (for frontend requests)
+// CORS + no-store (frontend fetches every 5s)
 app.use((_, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Cache-Control", "no-store");
   next();
 });
 
-// API endpoints
+// Data endpoints
 app.get("/api/marketcap", (_, res) => {
-  res.setHeader("Cache-Control", "no-store");
   res.json(cache);
 });
 
 app.get("/api/health", (_, res) => {
   res.json({
     running: true,
+    token: TOKEN_MINT,
+    supply: SUPPLY,
     fetchedAt: cache.fetchedAt,
     ok: cache.ok,
     lastError: cache.error,
@@ -88,4 +99,7 @@ app.get("/api/health", (_, res) => {
 
 app.listen(PORT, () => {
   console.log(`✅ Cache server listening on http://localhost:${PORT}`);
+  console.log(`   TOKEN_MINT=${TOKEN_MINT}`);
+  console.log(`   SUPPLY=${SUPPLY.toLocaleString()}`);
+  console.log(`   POLL_MS=${POLL_MS}ms`);
 });
