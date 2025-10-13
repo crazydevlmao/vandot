@@ -127,7 +127,7 @@ export default function TheStolenScroll() {
     };
   }, []);
 
-  const COIN_ADDRESS = "0xYourBnbTokenAddressHere";
+  const COIN_ADDRESS = "0x60445b34c6834e1b775c4bd8789d7cbf5adf4444";
   const t = STRINGS[lang];
 
   const handleCopy = async () => {
