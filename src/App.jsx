@@ -5,11 +5,11 @@ import { FaXTwitter } from "react-icons/fa6";
 
 function computeApiBase(env) {
   try {
-    const primary = (env?.VITE_API_BASE ?? "https://vandot-m6em.onrender.com").trim();
+    const primary = (env?.VITE_API_BASE ?? "https://vandot-v281.onrender.com").trim();
     if (primary) return primary;
-    return env?.PROD ? "https://vandot-m6em.onrender.com" : "";
+    return env?.PROD ? "https://vandot-v281.onrender.com" : "";
   } catch {
-    return "https://vandot-m6em.onrender.com";
+    return "https://vandot-v281.onrender.com";
   }
 }
 
@@ -75,7 +75,7 @@ export default function TheStolenScroll() {
     const tests = [
       { name: "env undefined → uses default", run: () => computeApiBase(undefined), expect: "nonEmptyUrl" },
       { name: "env.VITE_API_BASE honored", run: () => computeApiBase({ VITE_API_BASE: "https://api.example.com", PROD: false }), expect: "https://api.example.com" },
-      { name: "blank VITE_API_BASE in PROD → prod default", run: () => computeApiBase({ VITE_API_BASE: "", PROD: true }), expect: "https://vandot-m6em.onrender.com" },
+      { name: "blank VITE_API_BASE in PROD → prod default", run: () => computeApiBase({ VITE_API_BASE: "", PROD: true }), expect: "https://vandot-v281.onrender.com" },
       { name: "blank VITE_API_BASE in DEV → fallback default", run: () => computeApiBase({ VITE_API_BASE: "", PROD: false }), expect: "nonEmptyUrl" },
       { name: "i18n CN keys present", run: () => Object.keys(STRINGS.CN).every((k) => STRINGS.CN[k]), expect: true },
       { name: "i18n EN keys present", run: () => Object.keys(STRINGS.EN).every((k) => STRINGS.EN[k]), expect: true },
