@@ -9,9 +9,9 @@ const TOKEN_MINT = "0x70c120b14e82a6c3e866136bdaef6057a1a44444";
 const SUPPLY = 1_000_000_000;
 const BIRDEYE_API_KEY = "c9d5e2f71899433fa32469947e2ac7ab";
 
-// === WORKING EVM ENDPOINT ===
+// === EVM ENDPOINT ===
 const makePriceUrl = (addr) =>
-  `https://public-api.birdeye.so/defi/price?address=${addr}&include_liquidity=true`;
+  `https://public-api.birdeye.so/defi/price?address=${addr}&include_liquidity=true&_t=${Date.now()}`;
 
 let cache = {
   ok: false,
@@ -22,15 +22,21 @@ let cache = {
   error: null,
   _lastStatus: null,
   _lastBody: null,
+  _lastRemote: null,
 };
 
+// === POLLING LOOP ===
 async function pollBirdeyeOnce() {
   const url = makePriceUrl(TOKEN_MINT);
+
   try {
     const res = await fetch(url, {
       headers: {
         "X-API-KEY": BIRDEYE_API_KEY,
         "X-CHAIN": "bsc",
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
         accept: "application/json",
       },
     });
@@ -43,12 +49,18 @@ async function pollBirdeyeOnce() {
 
     const json = JSON.parse(text);
     const data = json?.data;
-
     if (!data?.value) throw new Error("Missing price data");
 
     const priceNum = Number(data.value);
     const liquidity = Number(data.liquidity ?? 0);
     const marketCap = priceNum * SUPPLY;
+
+    // detect if Birdeye returned stale data
+    if (cache._lastRemote === data.updateUnixTime) {
+      console.log(`[SKIP] same remote timestamp ${data.updateHumanTime}`);
+      return;
+    }
+    cache._lastRemote = data.updateUnixTime;
 
     cache = {
       ok: true,
@@ -59,10 +71,13 @@ async function pollBirdeyeOnce() {
       error: null,
       _lastStatus: res.status,
       _lastBody: text,
+      _lastRemote: data.updateUnixTime,
     };
 
     console.log(
-      `[OK] ${new Date().toISOString()} price=${priceNum} mcap=${marketCap} liq=${liquidity}`
+      `[OK] ${new Date().toISOString()} | price=${priceNum.toFixed(10)} | mcap=${marketCap.toFixed(
+        2
+      )} | liq=${liquidity.toFixed(2)} | updated=${data.updateHumanTime}`
     );
   } catch (err) {
     cache = {
@@ -75,6 +90,7 @@ async function pollBirdeyeOnce() {
   }
 }
 
+// === START POLLING EVERY 5 SECONDS ===
 pollBirdeyeOnce();
 setInterval(pollBirdeyeOnce, 5000);
 
@@ -92,6 +108,7 @@ app.get("/api/marketcap", (_, res) => {
     marketCap: cache.marketCap,
     liquidity: cache.liquidity,
     fetchedAt: cache.fetchedAt,
+    lastRemoteUpdate: cache._lastRemote,
     error: cache.error,
   });
 });
