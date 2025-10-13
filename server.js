@@ -5,7 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // === CONFIG ===
-const TOKEN_MINT = "0x60445b34c6834e1b775c4bd8789d7cbf5adf4444";
+const TOKEN_MINT = "0x86e6ebf4220ebd9f352608c397e358345c8c4444";
 const SUPPLY = 1_000_000_000;
 const BIRDEYE_API_KEY = "c9d5e2f71899433fa32469947e2ac7ab";
 
