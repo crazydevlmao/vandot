@@ -1,24 +1,22 @@
 // server.js
-// Node 18+ required (uses built-in fetch)
-const express = require("express");
+import express from "express";
 const app = express();
 
 const PORT = process.env.PORT || 3001;
 
-/** ── EDIT THESE TWO ───────────────────────────────────────────── **/
-const TOKEN_MINT = "0x60445b34c6834e1b775c4bd8789d7cbf5adf4444"; // your BEP-20 contract
-const SUPPLY = 1_000_000_000;                                     // total token supply (1 token units)
-/** ─────────────────────────────────────────────────────────────── **/
-
-// Your Birdeye API key (hardcoded by request)
+// === CONFIG ===
+const TOKEN_MINT = "0x60445b34c6834e1b775c4bd8789d7cbf5adf4444"; // BEP-20
+const SUPPLY = 1_000_000_000;
 const BIRDEYE_API_KEY = "c9d5e2f71899433fa32469947e2ac7ab";
 
-// Birdeye EVM price endpoint (BNB chain)
-const PRICE_URL = `https://public-api.birdeye.so/defi/evm/price?address=${TOKEN_MINT}&chain=bsc`;
-// (Alt multi-price, kept as fallback if you ever need it)
-// const MULTI_URL = `https://public-api.birdeye.so/defi/evm/multi_price?chain=bsc&list_address=${encodeURIComponent(TOKEN_MINT)}`;
+// === PRIVATE AUTH ENDPOINT (v3) ===
+// Supports Solana + EVM chains (bsc, eth, base, etc.)
+const makePriceUrl = (addr) =>
+  `https://public-api.birdeye.so/defi/v3/token_price?chain=bsc&address=${addr}`;
 
-const POLL_MS = 5000; // match the frontend 5s timer
+function isValidEvmAddress(addr) {
+  return typeof addr === "string" && /^0x[0-9a-fA-F]{40}$/.test(addr);
+}
 
 let cache = {
   ok: false,
@@ -26,95 +24,102 @@ let cache = {
   marketCap: null,
   fetchedAt: 0,
   error: null,
+  _lastStatus: null,
+  _lastBody: null,
 };
 
-// Basic 0x address sanity check (Birdeye will 400 on bad format)
-const EVM_ADDR_RE = /^0x[a-fA-F0-9]{40}$/;
-if (!EVM_ADDR_RE.test(TOKEN_MINT)) {
-  console.error(
-    `[FATAL] TOKEN_MINT is not a valid EVM address: ${TOKEN_MINT}. ` +
-    `Must match ${EVM_ADDR_RE}`
-  );
-}
-
-async function fetchBirdeyePrice() {
-  const headers = {
-    "X-API-KEY": BIRDEYE_API_KEY,
-    accept: "application/json",
-  };
-
-  // Try the EVM price endpoint
-  const res = await fetch(PRICE_URL, { headers });
-  const bodyText = await res.text();
-  let json;
-  try { json = bodyText ? JSON.parse(bodyText) : {}; } catch { json = {}; }
-
-  if (!res.ok) {
-    throw new Error(
-      `[price:bsc] HTTP ${res.status} | ${bodyText || "(no body)"}`
-    );
+async function pollBirdeyeOnce() {
+  if (!isValidEvmAddress(TOKEN_MINT)) {
+    cache = {
+      ...cache,
+      ok: false,
+      error: "Invalid EVM address format",
+      fetchedAt: Date.now(),
+    };
+    console.error(`[ERR] invalid address format: ${TOKEN_MINT}`);
+    return;
   }
 
-  // Expect: { success: true, data: { value: <number>, ... } }
-  const price = json?.data?.value;
-  if (!(typeof price === "number") || !isFinite(price) || price <= 0) {
-    throw new Error(
-      `Birdeye returned no/invalid price: ${JSON.stringify(json)}`
-    );
-  }
-  return price;
-}
-
-async function poll() {
+  const url = makePriceUrl(TOKEN_MINT);
   try {
-    if (!EVM_ADDR_RE.test(TOKEN_MINT)) {
-      throw new Error("Configured TOKEN_MINT fails EVM address regex");
+    const res = await fetch(url, {
+      headers: {
+        "X-API-KEY": BIRDEYE_API_KEY,
+        accept: "application/json",
+      },
+    });
+
+    const text = await res.text();
+    cache._lastStatus = res.status;
+    cache._lastBody = text;
+
+    if (!res.ok) {
+      throw new Error(`[price:bsc] HTTP ${res.status} | ${text}`);
     }
 
-    const price = await fetchBirdeyePrice();
-    const marketCap = price * SUPPLY;
+    const json = JSON.parse(text);
+    const tokenPrice = json?.data?.[TOKEN_MINT?.toLowerCase()]?.value ?? json?.data?.value;
+
+    if (tokenPrice == null || isNaN(Number(tokenPrice))) {
+      throw new Error(`Missing/invalid price: ${text?.slice(0, 200)}`);
+    }
+
+    const priceNum = Number(tokenPrice);
+    const marketCap = priceNum * SUPPLY;
 
     cache = {
       ok: true,
-      price,
+      price: priceNum,
       marketCap,
       fetchedAt: Date.now(),
       error: null,
+      _lastStatus: res.status,
+      _lastBody: text,
     };
 
-    // console.log(`[OK] ${new Date().toISOString()} price=${price} mcap=${marketCap}`);
+    console.log(`[OK] ${new Date().toISOString()} price=${priceNum} mcap=${marketCap}`);
   } catch (err) {
-    cache = { ...cache, ok: false, error: String(err) };
-    console.error(`[ERR] ${new Date().toISOString()} Birdeye poll: ${err.message}`);
+    cache = {
+      ...cache,
+      ok: false,
+      error: String(err?.message || err),
+      fetchedAt: Date.now(),
+    };
+    console.error(`[ERR] ${new Date().toISOString()} Birdeye poll: ${cache.error}`);
   }
 }
 
-// Initial poll then every 5s
-poll();
-setInterval(poll, POLL_MS);
+pollBirdeyeOnce();
+setInterval(pollBirdeyeOnce, 5000);
 
-// Allow any origin (frontend fetch)
+// === Express routes ===
 app.use((_, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();
 });
 
-// API: marketcap
 app.get("/api/marketcap", (_, res) => {
   res.setHeader("Cache-Control", "no-store");
-  res.json(cache);
+  res.json({
+    ok: cache.ok,
+    price: cache.price,
+    marketCap: cache.marketCap,
+    fetchedAt: cache.fetchedAt,
+    error: cache.error,
+  });
 });
 
-// API: health
 app.get("/api/health", (_, res) => {
   res.json({
     running: true,
     fetchedAt: cache.fetchedAt,
     ok: cache.ok,
     lastError: cache.error,
+    birdeyeStatus: cache._lastStatus,
+    birdeyeBodyPreview: cache._lastBody?.slice(0, 200),
   });
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Cache server listening on http://localhost:${PORT}`);
+  console.log(`✅ MarketCap cache server running at http://localhost:${PORT}`);
 });
