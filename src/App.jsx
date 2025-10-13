@@ -69,13 +69,6 @@ export default function TheStolenScroll() {
   const [lang, setLang] = useState("CN");
   const [copyState, setCopyState] = useState("idle");
 
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 50, damping: 30 });
-  const springY = useSpring(y, { stiffness: 50, damping: 30 });
-  const rotateX = useTransform(springY, [-100, 100], [6, -6]);
-  const rotateY = useTransform(springX, [-100, 100], [-6, 6]);
-
   useEffect(() => {
     const REFRESH_MS = 5000;
     async function fetchCached() {
@@ -88,7 +81,9 @@ export default function TheStolenScroll() {
         }
         const mc = Number(data.marketCap);
         setMarketCapText(`$${mc.toLocaleString(undefined, { maximumFractionDigits: 0 })}`);
-        if (data?.fetchedAt) setLastUpdated(new Date(data.fetchedAt).toLocaleTimeString());
+        if (data?.fetchedAt) {
+          setLastUpdated(new Date(data.fetchedAt).toLocaleTimeString());
+        }
       } catch {
         setMarketCapText("Error");
       }
@@ -98,27 +93,46 @@ export default function TheStolenScroll() {
     return () => clearInterval(poller);
   }, []);
 
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 50, damping: 30 });
+  const springY = useSpring(y, { stiffness: 50, damping: 30 });
+  const rotateX = useTransform(springY, [-100, 100], [6, -6]);
+  const rotateY = useTransform(springX, [-100, 100], [-6, 6]);
+
   const COIN_ADDRESS = "0x70c120b14e82a6c3e866136bdaef6057a1a44444";
   const t = STRINGS[lang];
 
   const handleCopy = async () => {
     const text = COIN_ADDRESS;
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-        setCopyState("ok");
-      } else {
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
-        setCopyState("ok");
+    let success = false;
+    if (!text || /YourBnbTokenAddressHere/i.test(text)) {
+      success = false;
+    } else {
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          success = true;
+        } else {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "fixed";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          try {
+            success = document.execCommand("copy");
+          } catch {
+            success = false;
+          }
+          document.body.removeChild(ta);
+        }
+      } catch {
+        success = false;
       }
-    } catch {
-      setCopyState("err");
     }
+    setCopyState(success ? "ok" : "err");
     setTimeout(() => setCopyState("idle"), 2300);
   };
 
@@ -145,6 +159,51 @@ export default function TheStolenScroll() {
             y.set(0);
           }}
         >
+          <div className="absolute top-4 right-4 flex items-center gap-2">
+            <a
+              href="https://x.com/i/communities/1977757594916618389"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-9 h-9 flex items-center justify-center rounded-full bg-yellow-500/20 border border-yellow-400/40 hover:bg-yellow-500/30 text-yellow-300 transition backdrop-blur-md shadow-lg"
+              aria-label="X Community"
+            >
+              <FaXTwitter size={18} />
+            </a>
+            <a
+              href="https://dexscreener.com/bsc/0x70c120b14e82a6c3e866136bdaef6057a1a44444"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-9 px-4 flex items-center justify-center rounded-full bg-yellow-500/20 border border-yellow-400/40 hover:bg-yellow-500/30 text-yellow-100 text-xs font-semibold tracking-wide transition backdrop-blur-md shadow-lg"
+            >
+              {t.buy}
+            </a>
+          </div>
+
+          <div className="absolute top-4 left-4 flex items-center gap-2">
+            <div className="relative inline-block">
+              <button
+                onClick={() => setLang((prev) => (prev === "CN" ? "EN" : "CN"))}
+                className="h-9 px-4 flex items-center justify-center rounded-full bg-yellow-500/20 border border-yellow-400/40 hover:bg-yellow-500/30 text-yellow-100 text-xs font-semibold tracking-wide transition backdrop-blur-md shadow-lg"
+                aria-label="Toggle Language"
+              >
+                {t.langToggle}
+              </button>
+              <span className="pulse-ring absolute inset-0 -z-10" />
+              <div className="swap-tip absolute top-11 left-1/2 pointer-events-none whitespace-nowrap flex items-center gap-1 px-2 py-1 rounded-full bg-[#1a120b]/90 border border-yellow-500/40 text-yellow-100 text-[10px] shadow">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="w-3 h-3">
+                  <path d="M12 7l-7 7h14z"></path>
+                </svg>
+                <span>swap language</span>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowLore(true)}
+              className="h-9 px-4 flex items-center justify-center rounded-full bg-yellow-500/20 border border-yellow-400/40 hover:bg-yellow-500/30 text-yellow-100 text-xs font-semibold tracking-wide transition backdrop-blur-md shadow-lg"
+            >
+              {t.lore}
+            </button>
+          </div>
+
           <motion.h1
             initial={{ opacity: 0, y: -40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -174,6 +233,7 @@ export default function TheStolenScroll() {
             {t.value}: <span className="font-bold">{marketCapText ?? (lang === "CN" ? "加载中..." : "Loading...")}</span>
           </motion.p>
 
+          {/* ✅ replaced countdown with last updated */}
           <p className="text-sm mt-2 text-yellow-500/80">
             {t.lastUpdated}: <span className="text-yellow-300 font-semibold">{lastUpdated ?? "—"}</span>
           </p>
@@ -213,6 +273,10 @@ if (typeof document !== "undefined" && !document.getElementById("stolen-scroll-s
   const style = document.createElement("style");
   style.id = "stolen-scroll-styles";
   style.innerHTML = `
+@keyframes paperRoll {
+  0% { transform: scaleY(0); opacity: 0; }
+  100% { transform: scaleY(1); opacity: 1; }
+}
 @keyframes shimmer {
   0% { background-position: 0% 0; }
   100% { background-position: 200% 0; }
@@ -222,6 +286,18 @@ if (typeof document !== "undefined" && !document.getElementById("stolen-scroll-s
   50% { filter: drop-shadow(0 0 10px rgba(240,185,11,0.35)); }
   100% { filter: drop-shadow(0 0 0 rgba(240,185,11,0.2)); }
 }
+@keyframes pulseRing {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  70% { transform: scale(1.2); opacity: 0; }
+  100% { opacity: 0; }
+}
+@keyframes tipFloat {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, -2px); }
+}
+body { background-color: #0b0a09; color: #f0b90b; }
+h1, p { font-family: "Noto Serif SC", "Songti SC", serif; }
+.scroll-border { border-image: linear-gradient(45deg, #f0b90b, #ffdf6e) 1; }
 .title-cn {
   display: inline-block;
   background-image: linear-gradient(90deg, rgba(240,185,11,0.95), #ffe18d, rgba(240,185,11,0.95));
@@ -229,8 +305,32 @@ if (typeof document !== "undefined" && !document.getElementById("stolen-scroll-s
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  text-shadow:
+    0 0 0 #000,
+    1px 0 #000,
+    -1px 0 #000,
+    0 1px #000,
+    0 -1px #000,
+    1px 1px #000,
+    -1px 1px #000,
+    1px -1px #000,
+    -1px -1px #000,
+    0 0 12px rgba(240,185,11,0.25);
   animation: shimmer 4.5s linear infinite, inkFlow 3.5s ease-in-out infinite;
 }
+.title-en {
+  text-shadow:
+    0 0 0 #000,
+    1px 0 #000,
+    -1px 0 #000,
+    0 1px #000,
+    0 -1px #000,
+    0 0 10px rgba(240,185,11,0.25);
+}
+.pulse-ring { position: absolute; inset: -4px; border: 1px solid rgba(240,185,11,0.45); border-radius: 9999px; animation: pulseRing 1.8s ease-out infinite; pointer-events: none; }
+.swap-tip { animation: tipFloat 2.4s ease-in-out infinite; white-space: nowrap; }
+@keyframes copiedPulse { 0% { transform: scale(1); } 50% { transform: scale(1.06); } 100% { transform: scale(1); } }
+.copied-pulse { animation: copiedPulse .8s ease-in-out 2; }
 `;
   document.head.appendChild(style);
 }
