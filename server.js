@@ -6,14 +6,15 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // ==== EDIT THESE TWO LINES ====
-const TOKEN_MINT = ""; // <-- paste your mint
-const SUPPLY = 1_000_000_000;              // <-- set your supply
+const TOKEN_MINT = "0xYourBnbTokenAddressHere"; // <-- paste your BEP-20 contract
+const SUPPLY = 1_000_000_000;                   // <-- total token supply (unadjusted)
 // ==============================
 
-// You asked to keep keys inline here:
+// Birdeye key (BNB also uses same key)
 const BIRDEYE_API_KEY = "c9d5e2f71899433fa32469947e2ac7ab";
 
-const BIRDEYE_URL = `https://public-api.birdeye.so/defi/price?address=${TOKEN_MINT}&include_liquidity=true`;
+// 💡 note: change chain=BNB
+const BIRDEYE_URL = `https://public-api.birdeye.so/defi/price?address=${TOKEN_MINT}&chain=BNB&include_liquidity=true`;
 
 let cache = {
   ok: false,
@@ -47,9 +48,7 @@ async function pollBirdEye() {
       fetchedAt: Date.now(),
       error: null
     };
-    // console.log("Polled OK:", cache);
   } catch (err) {
-    // keep last good value, just flag error
     cache = { ...cache, ok: false, error: String(err) };
     console.error("BirdEye poll error:", err);
   }
