@@ -42,10 +42,27 @@ const STRINGS = {
 我们将这份遗憾**铸刻到链上**。既然原作遭受破坏、结局未能挽回，就让艺术的**叙事与价值**在 **BNB 链**上以全新形态延续——可验证、可共享、不可篡改。滚滚长卷虽被剪断，**链上长卷**将继续展开。
 `,
     sourcesLabel: "相关报道：",
-    // ⬇️ Optional. Leave empty or fill with { label, url } objects.
     sources: [
-      // { label: "SCMP 报道（示例）", url: "https://www.scmp.com/" },
-      // { label: "BBC News（示例）", url: "https://www.bbc.com/news" },
+      {
+        label: "Smithsonian Magazine – Stolen Mao Zedong Scroll Found Cut in Half",
+        url: "https://www.smithsonianmag.com/smart-news/mao-zedong-scroll-was-cut-half-180976033/",
+      },
+      {
+        label: "Reuters – Valuable stolen Mao Zedong scroll found cut in half",
+        url: "https://www.reuters.com/idUSKBN26T1TU/",
+      },
+      {
+        label: "The Art Newspaper – Stolen Mao Zedong scroll found cut in half",
+        url: "https://www.theartnewspaper.com/2020/10/07/stolen-mao-zedong-scroll-worth-dollar300m-found-cut-in-half",
+      },
+      {
+        label: "The Guardian – Stolen Mao scroll cut in two",
+        url: "https://www.theguardian.com/world/2020/oct/07/stolen-mao-scroll-worth-230m-was-cut-in-two-by-50-buyer-police-say",
+      },
+      {
+        label: "Artnet News – Recovered in a $645M Hong Kong heist",
+        url: "https://news.artnet.com/art-world-archives/three-men-arrested-connection-645-million-art-heist-hong-kong-1914181",
+      },
     ],
   },
   EN: {
@@ -64,10 +81,27 @@ A nine-foot Mao Zedong calligraphy was stolen from Hong Kong collector Fu Chunxi
 Here, we **preserve the narrative on-chain**. Because the original was never restored, we reimagine its cultural value on the **BNB chain**—verifiable, shareable, and tamper-proof. Though the paper was severed, the **on-chain scroll** continues.
 `,
     sourcesLabel: "Further reading:",
-    // ⬇️ Optional. Leave empty or fill with { label, url } objects.
     sources: [
-      // { label: "SCMP coverage (example)", url: "https://www.scmp.com/" },
-      // { label: "BBC News (example)", url: "https://www.bbc.com/news" },
+      {
+        label: "Smithsonian Magazine – Stolen Mao Zedong Scroll Found Cut in Half",
+        url: "https://www.smithsonianmag.com/smart-news/mao-zedong-scroll-was-cut-half-180976033/",
+      },
+      {
+        label: "Reuters – Valuable stolen Mao Zedong scroll found cut in half",
+        url: "https://www.reuters.com/idUSKBN26T1TU/",
+      },
+      {
+        label: "The Art Newspaper – Stolen Mao Zedong scroll found cut in half",
+        url: "https://www.theartnewspaper.com/2020/10/07/stolen-mao-zedong-scroll-worth-dollar300m-found-cut-in-half",
+      },
+      {
+        label: "The Guardian – Stolen Mao scroll cut in two",
+        url: "https://www.theguardian.com/world/2020/oct/07/stolen-mao-scroll-worth-230m-was-cut-in-two-by-50-buyer-police-say",
+      },
+      {
+        label: "Artnet News – Recovered in a $645M Hong Kong heist",
+        url: "https://news.artnet.com/art-world-archives/three-men-arrested-connection-645-million-art-heist-hong-kong-1914181",
+      },
     ],
   },
 };
@@ -309,7 +343,7 @@ export default function TheStolenScroll() {
               />
 
               {/* sources list */}
-              {(t.sources && t.sources.length > 0) && (
+              {t.sources && t.sources.length > 0 && (
                 <div className="mt-6 pt-4 border-t border-yellow-700/40">
                   <p className="text-yellow-300 font-semibold mb-2">{t.sourcesLabel}</p>
                   <ul className="list-disc pl-5 space-y-1 text-yellow-100/90">
@@ -385,7 +419,7 @@ h1, p { font-family: "Noto Serif SC", "Songti SC", serif; }
     0 0 12px rgba(240,185,11,0.25);
   animation: shimmer 4.5s linear infinite, inkFlow 3.5s ease-in-out infinite;
 }
-.title-en {
+title-en {
   text-shadow:
     0 0 0 #000,
     1px 0 #000,
