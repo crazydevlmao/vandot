@@ -265,6 +265,42 @@ export default function TheStolenScroll() {
           </button>
         </div>
       </footer>
+
+      {/* === LORE MODAL (added, nothing else changed) === */}
+      {showLore && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center"
+          role="dialog"
+          aria-modal="true"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowLore(false);
+          }}
+        >
+          {/* backdrop */}
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+
+          {/* card */}
+          <div className="relative z-10 max-w-3xl w-[92vw] sm:w-[85vw] md:w-[70vw] max-h-[80vh] overflow-hidden rounded-3xl border border-yellow-700/60 bg-gradient-to-b from-[#1a120b]/95 to-[#0c0907]/95 shadow-[0_0_40px_rgba(255,215,0,0.15)]">
+            <div className="flex items-center justify-between px-6 sm:px-8 py-4 border-b border-yellow-700/40">
+              <h2 className="text-xl sm:text-2xl font-bold">{t.loreHeading}</h2>
+              <button
+                onClick={() => setShowLore(false)}
+                className="h-9 px-4 rounded-full bg-yellow-500/20 border border-yellow-500/40 hover:bg-yellow-500/30 text-yellow-100 text-xs font-semibold tracking-wide transition"
+                aria-label="Close"
+              >
+                {lang === "CN" ? "关闭" : "Close"}
+              </button>
+            </div>
+
+            <div className="px-6 sm:px-8 py-5 overflow-y-auto max-h-[70vh] text-left leading-relaxed text-yellow-100/90">
+              <div
+                className="prose prose-invert prose-sm sm:prose-base max-w-none"
+                dangerouslySetInnerHTML={{ __html: mdInlineBold(t.loreBody) }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
