@@ -42,6 +42,11 @@ const STRINGS = {
 我们将这份遗憾**铸刻到链上**。既然原作遭受破坏、结局未能挽回，就让艺术的**叙事与价值**在 **BNB 链**上以全新形态延续——可验证、可共享、不可篡改。滚滚长卷虽被剪断，**链上长卷**将继续展开。
 `,
     sourcesLabel: "相关报道：",
+    // ⬇️ Optional. Leave empty or fill with { label, url } objects.
+    sources: [
+      // { label: "SCMP 报道（示例）", url: "https://www.scmp.com/" },
+      // { label: "BBC News（示例）", url: "https://www.bbc.com/news" },
+    ],
   },
   EN: {
     title_cn: "被盗的卷轴",
@@ -59,6 +64,11 @@ A nine-foot Mao Zedong calligraphy was stolen from Hong Kong collector Fu Chunxi
 Here, we **preserve the narrative on-chain**. Because the original was never restored, we reimagine its cultural value on the **BNB chain**—verifiable, shareable, and tamper-proof. Though the paper was severed, the **on-chain scroll** continues.
 `,
     sourcesLabel: "Further reading:",
+    // ⬇️ Optional. Leave empty or fill with { label, url } objects.
+    sources: [
+      // { label: "SCMP coverage (example)", url: "https://www.scmp.com/" },
+      // { label: "BBC News (example)", url: "https://www.bbc.com/news" },
+    ],
   },
 };
 
@@ -266,7 +276,7 @@ export default function TheStolenScroll() {
         </div>
       </footer>
 
-      {/* === LORE MODAL (added, nothing else changed) === */}
+      {/* === LORE MODAL (with sources) === */}
       {showLore && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center"
@@ -297,6 +307,27 @@ export default function TheStolenScroll() {
                 className="prose prose-invert prose-sm sm:prose-base max-w-none"
                 dangerouslySetInnerHTML={{ __html: mdInlineBold(t.loreBody) }}
               />
+
+              {/* sources list */}
+              {(t.sources && t.sources.length > 0) && (
+                <div className="mt-6 pt-4 border-t border-yellow-700/40">
+                  <p className="text-yellow-300 font-semibold mb-2">{t.sourcesLabel}</p>
+                  <ul className="list-disc pl-5 space-y-1 text-yellow-100/90">
+                    {t.sources.map((s, idx) => (
+                      <li key={idx}>
+                        <a
+                          href={s.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline hover:opacity-80"
+                        >
+                          {s.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
         </div>
