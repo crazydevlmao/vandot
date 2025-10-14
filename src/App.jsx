@@ -144,7 +144,7 @@ export default function TheStolenScroll() {
   const rotateX = useTransform(springY, [-100, 100], [6, -6]);
   const rotateY = useTransform(springX, [-100, 100], [-6, 6]);
 
-  const COIN_ADDRESS = "0x11f6a5fbbd2cc1726ae048e95f37b294b3e34444";
+  const COIN_ADDRESS = "4444";
   const t = STRINGS[lang];
 
   const handleCopy = async () => {
@@ -214,7 +214,7 @@ export default function TheStolenScroll() {
               <FaXTwitter size={18} />
             </a>
             <a
-              href="https://dexscreener.com/bsc/0x11f6a5fbbd2cc1726ae048e95f37b294b3e34444"
+              href="https://dexscreener.com/bsc/4444"
               target="_blank"
               rel="noopener noreferrer"
               className="h-9 px-4 flex items-center justify-center rounded-full bg-yellow-500/20 border border-yellow-400/40 hover:bg-yellow-500/30 text-yellow-100 text-xs font-semibold tracking-wide transition backdrop-blur-md shadow-lg"
