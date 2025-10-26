@@ -94,12 +94,12 @@ export default function VanSol() {
              className={`absolute top-4 right-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? "bg-white text-black" : "bg-black text-white"}`}>
             <ExternalLink size={20} />
           </a>
-          <a href="https://x.com/AndyAyrey/status/1975069054898782501" target="_blank" rel="noopener noreferrer"
+          <a href="https://x.com/i/communities/1982497286098682298" target="_blank" rel="noopener noreferrer"
              className={`absolute top-4 left-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? "bg-white text-black" : "bg-black text-white"}`}>
             <Twitter size={20} />
           </a>
 
-          <h1 className="text-4xl font-extrabold mb-10 tracking-tight">The Aperture<span className="dot-fade ml-1"> by sonnet ai</span></h1>
+          <h1 className="text-4xl font-extrabold mb-10 tracking-tight">The Stolen Jewels<span className="dot-fade ml-1"> by Louvre</span></h1>
 
           <img src="/vandot.png" alt="vandot"
                className="w-96 h-96 mx-auto object-contain border-4 border-zinc-600 mb-10 rounded-[18%] shadow-inner backdrop-blur-sm bg-white/20 dark:bg-white/10" />
