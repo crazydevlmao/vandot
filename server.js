@@ -1,100 +1,65 @@
 // server.js
-import express from "express";
+// Node 18+ required (uses built-in fetch)
+const express = require("express");
 const app = express();
 
 const PORT = process.env.PORT || 3001;
 
-// === CONFIG ===
-const TOKEN_MINT = "0x0e26e0cf75fc3951566a91560955b66fb25b4444";
-const SUPPLY = 1_000_000_000;
+// ==== EDIT THESE TWO LINES ====
+const TOKEN_MINT = "EzKQUDQaeAwMrk2jgSiFYRQBhWbZar31pj8ce8MHfKCB"; // <-- paste your mint
+const SUPPLY = 1_000_000_000;              // <-- set your supply
+// ==============================
+
+// You asked to keep keys inline here:
 const BIRDEYE_API_KEY = "c9d5e2f71899433fa32469947e2ac7ab";
 
-// === EVM ENDPOINT ===
-const makePriceUrl = (addr) =>
-  `https://public-api.birdeye.so/defi/price?address=${addr}&include_liquidity=true&_t=${Date.now()}`;
+const BIRDEYE_URL = `https://public-api.birdeye.so/defi/price?address=${TOKEN_MINT}&include_liquidity=true`;
 
 let cache = {
   ok: false,
   price: null,
   marketCap: null,
-  liquidity: null,
   fetchedAt: 0,
-  error: null,
-  _lastStatus: null,
-  _lastBody: null,
-  _lastRemote: null,
+  error: null
 };
 
-// === POLLING LOOP ===
-async function pollBirdeyeOnce() {
-  const url = makePriceUrl(TOKEN_MINT);
-
+async function pollBirdEye() {
   try {
-    const res = await fetch(url, {
+    const res = await fetch(BIRDEYE_URL, {
       headers: {
         "X-API-KEY": BIRDEYE_API_KEY,
-        "X-CHAIN": "bsc",
-        "Cache-Control": "no-cache, no-store, must-revalidate",
-        Pragma: "no-cache",
-        Expires: "0",
-        accept: "application/json",
-      },
+        "accept": "application/json"
+      }
     });
+    const json = await res.json();
+    const tokenPrice = json?.data?.value;
 
-    const text = await res.text();
-    cache._lastStatus = res.status;
-    cache._lastBody = text;
-
-    if (!res.ok) throw new Error(`[price:bsc] HTTP ${res.status} | ${text}`);
-
-    const json = JSON.parse(text);
-    const data = json?.data;
-    if (!data?.value) throw new Error("Missing price data");
-
-    const priceNum = Number(data.value);
-    const liquidity = Number(data.liquidity ?? 0);
-    const marketCap = priceNum * SUPPLY;
-
-    // detect if Birdeye returned stale data
-    if (cache._lastRemote === data.updateUnixTime) {
-      console.log(`[SKIP] same remote timestamp ${data.updateHumanTime}`);
-      return;
+    if (!tokenPrice || isNaN(tokenPrice)) {
+      throw new Error("Invalid price in BirdEye response");
     }
-    cache._lastRemote = data.updateUnixTime;
+
+    const marketCap = Number(tokenPrice) * SUPPLY;
 
     cache = {
       ok: true,
-      price: priceNum,
+      price: Number(tokenPrice),
       marketCap,
-      liquidity,
       fetchedAt: Date.now(),
-      error: null,
-      _lastStatus: res.status,
-      _lastBody: text,
-      _lastRemote: data.updateUnixTime,
+      error: null
     };
-
-    console.log(
-      `[OK] ${new Date().toISOString()} | price=${priceNum.toFixed(10)} | mcap=${marketCap.toFixed(
-        2
-      )} | liq=${liquidity.toFixed(2)} | updated=${data.updateHumanTime}`
-    );
+    // console.log("Polled OK:", cache);
   } catch (err) {
-    cache = {
-      ...cache,
-      ok: false,
-      error: String(err?.message || err),
-      fetchedAt: Date.now(),
-    };
-    console.error(`[ERR] ${new Date().toISOString()} Birdeye poll: ${cache.error}`);
+    // keep last good value, just flag error
+    cache = { ...cache, ok: false, error: String(err) };
+    console.error("BirdEye poll error:", err);
   }
 }
 
-// === START POLLING EVERY 5 SECONDS ===
-pollBirdeyeOnce();
-setInterval(pollBirdeyeOnce, 5000);
+// initial poll then every 5 seconds
+pollBirdEye();
+setInterval(pollBirdEye, 5000);
 
-// === EXPRESS API ===
+// allow any origin (frontends on Vercel/Netlify/etc.)
 app.use((_, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();
@@ -102,28 +67,13 @@ app.use((_, res, next) => {
 
 app.get("/api/marketcap", (_, res) => {
   res.setHeader("Cache-Control", "no-store");
-  res.json({
-    ok: cache.ok,
-    price: cache.price,
-    marketCap: cache.marketCap,
-    liquidity: cache.liquidity,
-    fetchedAt: cache.fetchedAt,
-    lastRemoteUpdate: cache._lastRemote,
-    error: cache.error,
-  });
+  res.json(cache);
 });
 
 app.get("/api/health", (_, res) => {
-  res.json({
-    running: true,
-    fetchedAt: cache.fetchedAt,
-    ok: cache.ok,
-    lastError: cache.error,
-    birdeyeStatus: cache._lastStatus,
-    birdeyeBodyPreview: cache._lastBody?.slice(0, 200),
-  });
+  res.json({ running: true, fetchedAt: cache.fetchedAt, ok: cache.ok });
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ MarketCap cache server running at http://localhost:${PORT}`);
+  console.log(`Cache server listening on http://localhost:${PORT}`);
 });
