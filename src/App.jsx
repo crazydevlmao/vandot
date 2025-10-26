@@ -108,10 +108,20 @@ export default function VanSol() {
             <Twitter size={20} />
           </a>
 
-          <h1 className="text-4xl font-extrabold mb-10 tracking-tight">The Stolen Jewels<span className="dot-fade ml-1"> by Louvre</span></h1>
+         <h1 className="text-4xl font-extrabold mb-10 tracking-tight">
+  The Stolen Jewels<span className="dot-fade ml-1"> by Louvre</span>
+</h1>
 
-          <img src="/vandot.png" alt="vandot"
-               className="w-96 h-96 mx-auto object-contain border-4 border-zinc-600 mb-10 rounded-[18%] shadow-inner backdrop-blur-sm bg-white/20 dark:bg-white/10" />
+<p className={`text-lg italic mb-6 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+  reborn onchain, immutable.
+</p>
+
+<img
+  src="/vandot.png"
+  alt="vandot"
+  className="w-96 h-96 mx-auto object-contain border-4 border-zinc-600 mb-10 rounded-[18%] shadow-inner backdrop-blur-sm bg-white/20 dark:bg-white/10"
+/>
+
 
           <motion.p
             key={marketCapText}
