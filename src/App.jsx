@@ -90,20 +90,18 @@ export default function VanSol() {
           }}
           onMouseLeave={() => { x.set(0); y.set(0); }}
         >
-         <motion.a
+        <a
   href="https://pump.fun/AsJg2XqYixWeKL6eJKEhHCmWbbPBVENLiKNe5UnDPyNw"
   target="_blank"
   rel="noopener noreferrer"
-  whileHover={{ scale: 1.1, boxShadow: "0px 0px 12px rgba(0,255,100,0.8)" }}
-  whileTap={{ scale: 0.95 }}
-  className={`absolute top-4 right-4 px-4 py-2 rounded-xl font-bold tracking-wide text-sm transition-all duration-300 ${
-    darkMode
-      ? "bg-gradient-to-r from-green-400 to-lime-500 text-black"
-      : "bg-gradient-to-r from-black to-green-600 text-white"
+  className={`absolute top-4 right-4 px-3 py-1.5 rounded-full font-semibold text-sm transition hover:scale-110 ${
+    darkMode ? "bg-white text-black" : "bg-black text-white"
   }`}
 >
   BUY
-</motion.a>
+</a>
+
+
 
           <a href="https://x.com/i/communities/1982497286098682298" target="_blank" rel="noopener noreferrer"
              className={`absolute top-4 left-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? "bg-white text-black" : "bg-black text-white"}`}>
