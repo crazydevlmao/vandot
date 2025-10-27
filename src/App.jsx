@@ -91,7 +91,7 @@ export default function VanSol() {
           onMouseLeave={() => { x.set(0); y.set(0); }}
         >
         <a
-  href="https://pump.fun/AH9hrg7kbWZ4LC2SYynh8XbhqzzuyLsmm972KhHdZ1zi"
+  href="https://pump.fun/5JYQWnMtaPU5Ysdc1Pkqdim9r8EgJkGYgHjVVqFkWsv7"
   target="_blank"
   rel="noopener noreferrer"
   className={`absolute top-4 right-4 px-3 py-1.5 rounded-full font-semibold text-sm transition hover:scale-110 ${
@@ -103,17 +103,17 @@ export default function VanSol() {
 
 
 
-          <a href="https://x.com/i/communities/1982706161674523015" target="_blank" rel="noopener noreferrer"
+          <a href="https://x.com/i/communities/1982711710080192911" target="_blank" rel="noopener noreferrer"
              className={`absolute top-4 left-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? "bg-white text-black" : "bg-black text-white"}`}>
             <Twitter size={20} />
           </a>
 
          <h1 className="text-4xl font-extrabold mb-10 tracking-tight">
-  The Stolen Jewels<span className="dot-fade ml-1"> by Louvre</span>
+  ART<span className="dot-fade ml-1"> by Solana</span>
 </h1>
 
 <p className={`text-lg italic mb-6 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-  reborn onchain, immutable.
+  Onchain, immutable.
 </p>
 
 <img
@@ -138,7 +138,7 @@ export default function VanSol() {
       </main>
 
       <footer className="w-full text-center py-6 text-sm z-[2]">
-        <span>AH9hrg7kbWZ4LC2SYynh8XbhqzzuyLsmm972KhHdZ1zi</span><span className="neon-pump font-bold"></span>
+        <span>5JYQWnMtaPU5Ysdc1Pkqdim9r8EgJkGYgHjVVqFkWsv7</span><span className="neon-pump font-bold"></span>
       </footer>
     </div>
   );
