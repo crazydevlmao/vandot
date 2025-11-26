@@ -91,7 +91,7 @@ export default function VanSol() {
           onMouseLeave={() => { x.set(0); y.set(0); }}
         >
         <a
-  href="https://pump.fun/3hUWEp91jBcgkg6uiKERGRPP6X1ojWsLH4G8AfU2MY5f"
+  href="https://pump.fun/EyEDB8LST5C8g73SRTdPtHwSym3t5MLdaP5V2XYw8FMj"
   target="_blank"
   rel="noopener noreferrer"
   className={`absolute top-4 right-4 px-3 py-1.5 rounded-full font-semibold text-sm transition hover:scale-110 ${
@@ -103,17 +103,17 @@ export default function VanSol() {
 
 
 
-          <a href="https://x.com/chartisartsol" target="_blank" rel="noopener noreferrer"
+          <a href="https://x.com/i/communities/1993795288172318805" target="_blank" rel="noopener noreferrer"
              className={`absolute top-4 left-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? "bg-white text-black" : "bg-black text-white"}`}>
             <Twitter size={20} />
           </a>
 
          <h1 className="text-4xl font-extrabold mb-10 tracking-tight">
-  chART<span className="dot-fade ml-1"> by Trenches</span>
+  ART<span className="dot-fade ml-1"> by Human</span>
 </h1>
 
 <p className={`text-lg italic mb-6 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-  Every candle tells a story. Every trader is an artist.
+  Evidence that imperfect humans existed.
 </p>
 
 <img
@@ -138,7 +138,7 @@ export default function VanSol() {
       </main>
 
       <footer className="w-full text-center py-6 text-sm z-[2]">
-        <span>3hUWEp91jBcgkg6uiKERGRPP6X1ojWsLH4G8AfU2MY5f</span><span className="neon-pump font-bold"></span>
+        <span>EyEDB8LST5C8g73SRTdPtHwSym3t5MLdaP5V2XYw8FMj</span><span className="neon-pump font-bold"></span>
       </footer>
     </div>
   );
