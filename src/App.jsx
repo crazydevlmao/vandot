@@ -103,17 +103,17 @@ export default function VanSol() {
 
 
 
-          <a href="https://x.com/i/communities/1996084782480908743" target="_blank" rel="noopener noreferrer"
+          <a href="https://x.com/i/communities/1997519065758273830/" target="_blank" rel="noopener noreferrer"
              className={`absolute top-4 left-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? "bg-white text-black" : "bg-black text-white"}`}>
             <Twitter size={20} />
           </a>
 
          <h1 className="text-4xl font-extrabold mb-10 tracking-tight">
-  ART<span className="dot-fade ml-1"> by Human</span>
+  Coin Tape Wall<span className="dot-fade ml-1"></span>
 </h1>
 
 <p className={`text-lg italic mb-6 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
-  Evidence that imperfect humans existed before the AI takeover. Built on solana.
+  Just a coin taped to a wall.
 </p>
 
 <img
