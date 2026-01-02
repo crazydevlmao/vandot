@@ -91,7 +91,7 @@ export default function VanSol() {
           onMouseLeave={() => { x.set(0); y.set(0); }}
         >
         <a
-  href="https://pump.fun/"
+  href="https://pump.fun/BCWMYehLjxa75eEPfgaBDcWD18cQBeWuHoR4NgYNpump"
   target="_blank"
   rel="noopener noreferrer"
   className={`absolute top-4 right-4 px-3 py-1.5 rounded-full font-semibold text-sm transition hover:scale-110 ${
@@ -138,7 +138,7 @@ export default function VanSol() {
       </main>
 
       <footer className="w-full text-center py-6 text-sm z-[2]">
-        <span>...pump</span><span className="neon-pump font-bold"></span>
+        <span>BCWMYehLjxa75eEPfgaBDcWD18cQBeWuHoR4NgYNpump</span><span className="neon-pump font-bold"></span>
       </footer>
     </div>
   );
