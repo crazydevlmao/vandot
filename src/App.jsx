@@ -91,7 +91,7 @@ export default function VanSol() {
           onMouseLeave={() => { x.set(0); y.set(0); }}
         >
         <a
-  href="https://pump.fun/BCWMYehLjxa75eEPfgaBDcWD18cQBeWuHoR4NgYNpump"
+  href="https://pump.fun/"
   target="_blank"
   rel="noopener noreferrer"
   className={`absolute top-4 right-4 px-3 py-1.5 rounded-full font-semibold text-sm transition hover:scale-110 ${
@@ -103,7 +103,7 @@ export default function VanSol() {
 
 
 
-          <a href="https://x.com/i/communities/2007108920335094026" target="_blank" rel="noopener noreferrer"
+          <a href="https://x.com/i/communities/2024340054353817983" target="_blank" rel="noopener noreferrer"
              className={`absolute top-4 left-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? "bg-white text-black" : "bg-black text-white"}`}>
             <Twitter size={20} />
           </a>
@@ -138,7 +138,7 @@ export default function VanSol() {
       </main>
 
       <footer className="w-full text-center py-6 text-sm z-[2]">
-        <span>BCWMYehLjxa75eEPfgaBDcWD18cQBeWuHoR4NgYNpump</span><span className="neon-pump font-bold"></span>
+        <span>pump</span><span className="neon-pump font-bold"></span>
       </footer>
     </div>
   );
