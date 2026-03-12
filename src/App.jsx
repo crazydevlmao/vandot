@@ -103,7 +103,7 @@ export default function VanSol() {
 
 
 
-          <a href="https://x.com/i/communities/2025344959977517288" target="_blank" rel="noopener noreferrer"
+          <a href="https://x.com/i/communities/2031953740635197501" target="_blank" rel="noopener noreferrer"
              className={`absolute top-4 left-4 p-2 rounded-full transition hover:scale-110 ${darkMode ? "bg-white text-black" : "bg-black text-white"}`}>
             <Twitter size={20} />
           </a>
@@ -138,7 +138,7 @@ export default function VanSol() {
       </main>
 
       <footer className="w-full text-center py-6 text-sm z-[2]">
-        <span>pump</span><span className="neon-pump font-bold"></span>
+        <span>...pump</span><span className="neon-pump font-bold"></span>
       </footer>
     </div>
   );
