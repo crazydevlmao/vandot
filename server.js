@@ -6,7 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // ==== EDIT THESE TWO LINES ====
-const TOKEN_MINT = "R24eUSANhVArWfhKnC6cM8Zoz1t3bZ2nLZr3wcgpump"; // <-- paste your mint
+const TOKEN_MINT = "4igTu2C2CZTEQQtWgJLqD1LxC7JnxU3tLJ6baeGapump"; // <-- paste your mint
 const SUPPLY = 1_000_000_000;              // <-- set your supply
 // ==============================
 
